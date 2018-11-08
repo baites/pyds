@@ -1,2 +1,2 @@
 # pysd
-Collection of data structure implemented in python for fun.
+Collection of data structures implemented in python for fun.
