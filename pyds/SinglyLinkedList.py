@@ -1,4 +1,4 @@
-"""Implement pure python SinglyLinkedList."""
+"""Implement a pure python SinglyLinkedList."""
 
 from collections.abc import Sized, Iterator, Iterable
 from pyds.exception import EmptyList

@@ -1,4 +1,4 @@
-"""Implement pure python DoublyLinkedList."""
+"""Implement a pure python DoublyLinkedList."""
 
 from collections.abc import Sized, Iterator, Reversible
 from pyds.exception import EmptyList
