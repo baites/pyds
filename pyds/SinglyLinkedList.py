@@ -15,10 +15,12 @@ class SinglyLinkedNode:
 class SinglyLinkedListIter(Iterator):
     """Implement a list iterator."""
     def __init__(self, node):
+        """Constructor."""
         self._node = node
         self._stop_iter = False
 
     def __next__(self):
+        """Return the next item in the list."""
         if self._stop_iter:
             raise StopIteration
         if not self._node:
@@ -46,14 +48,14 @@ class SinglyLinkedList(Sized, Iterable):
         return SinglyLinkedListIter(self._head)
 
     def push_front(self, value):
-        """Push value in the front of the list."""
+        """Push value in the front of the list O(1)."""
         node = SinglyLinkedNode(value)
         node.next = self._head
         self._head = node
         self._size += 1
 
     def pop_front(self):
-        """Pop value from the front of the list."""
+        """Pop value from the front of the list O(1)."""
         if not self._head:
             raise EmptyList('Cannot pop front value.')
         node = self._head
@@ -63,7 +65,7 @@ class SinglyLinkedList(Sized, Iterable):
         return node.value
 
     def front(self):
-        """Return value at the front of the list."""
+        """Return value at the front of the list O(1)."""
         if not self._head:
             raise EmptyList('Cannot return front value.')
         return self._head.value
