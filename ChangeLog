@@ -1,5 +1,8 @@
 CHANGES
 =======
 
+* Improving docstrings
+* Improve docstrings
+* Adding pbr and singly and doubly list implementation
 * Update README.md
 * Initial commit

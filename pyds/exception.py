@@ -9,3 +9,8 @@ class PydsError(Exception):
 class EmptyList(PydsError):
     """Empty list exception."""
     pass
+
+
+class EmptyQueue(PydsError):
+    """Empty queue exception."""
+    pass
