@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+* Implementing priority queue
 * Improving docstrings
 * Improve docstrings
 * Adding pbr and singly and doubly list implementation

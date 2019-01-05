@@ -88,8 +88,10 @@ class DoublyLinkedList(Sized, Reversible):
             raise EmptyList('Cannot pop front value.')
         node = self._head
         self._head = node.next
-        if self._head:
+        if self._head is not None:
             self._head.prev = None
+        else:
+            self._tail = None
         node.next = None
         self._size -= 1
         return node.value
@@ -117,8 +119,10 @@ class DoublyLinkedList(Sized, Reversible):
             raise EmptyList('Cannot pop back value.')
         node = self._tail
         self._tail = node.prev
-        if self._tail:
+        if self._tail is not None:
             self._tail.next = None
+        else:
+            self._head = None
         node.prev = None
         self._size -= 1
         return node.value

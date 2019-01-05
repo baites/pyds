@@ -53,6 +53,8 @@ class SinglyLinkedList(Sized, Iterable):
         node.next = self._head
         self._head = node
         self._size += 1
+        if not self._tail:
+            self._tail = self._head
 
     def pop_front(self):
         """Pop value from the front of the list O(1)."""
@@ -60,6 +62,8 @@ class SinglyLinkedList(Sized, Iterable):
             raise EmptyList('Cannot pop front value.')
         node = self._head
         self._head = node.next
+        if self._head is None:
+            self._tail = None
         node.next = None
         self._size -= 1
         return node.value
@@ -69,3 +73,9 @@ class SinglyLinkedList(Sized, Iterable):
         if not self._head:
             raise EmptyList('Cannot return front value.')
         return self._head.value
+
+    def back(self):
+        """Return value at the back of the list O(1)."""
+        if not self._tail:
+            raise EmptyList('Cannot return back value.')
+        return self._tail.value
