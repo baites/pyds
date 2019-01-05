@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+* Adding back() in SinglyLinkedList that is O(1)
 * Implementing priority queue
 * Improving docstrings
 * Improve docstrings
