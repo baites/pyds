@@ -58,6 +58,7 @@ class DoublyLinkedList(Sized, Reversible):
         self._head = None
         self._tail = None
         self._size = 0
+        self._empty_list = EmptyList
 
     def __len__(self):
         """Return list size."""
@@ -85,7 +86,7 @@ class DoublyLinkedList(Sized, Reversible):
     def pop_front(self):
         """Pop value from the front of the list O(1)."""
         if not self._head:
-            raise EmptyList('Cannot pop front value.')
+            raise self._empty_list('Cannot pop front value.')
         node = self._head
         self._head = node.next
         if self._head is not None:
@@ -99,7 +100,7 @@ class DoublyLinkedList(Sized, Reversible):
     def front(self):
         """Return value at the front of the list O(1)."""
         if not self._head:
-            raise EmptyList('Cannot return front value.')
+            raise self._empty_list('Cannot return front value.')
         return self._head.value
 
     def push_back(self, value):
@@ -116,7 +117,7 @@ class DoublyLinkedList(Sized, Reversible):
     def pop_back(self):
         """Pop value from the back of the list O(1)."""
         if not self._head:
-            raise EmptyList('Cannot pop back value.')
+            raise self._empty_list('Cannot pop back value.')
         node = self._tail
         self._tail = node.prev
         if self._tail is not None:
@@ -130,5 +131,5 @@ class DoublyLinkedList(Sized, Reversible):
     def back(self):
         """Return value at the back of the list O(1)."""
         if not self._tail:
-            raise EmptyList('Cannot return back value.')
+            raise self._empty_list('Cannot return back value.')
         return self._tail.value

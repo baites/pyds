@@ -38,6 +38,7 @@ class SinglyLinkedList(Sized, Iterable):
         self._head = None
         self._tail = None
         self._size = 0
+        self._empty_list = EmptyList
 
     def __len__(self):
         """Return list size."""
@@ -71,11 +72,11 @@ class SinglyLinkedList(Sized, Iterable):
     def front(self):
         """Return value at the front of the list O(1)."""
         if not self._head:
-            raise EmptyList('Cannot return front value.')
+            raise self._empty_list('Cannot return front value.')
         return self._head.value
 
     def back(self):
         """Return value at the back of the list O(1)."""
         if not self._tail:
-            raise EmptyList('Cannot return back value.')
+            raise self._empty_list('Cannot return back value.')
         return self._tail.value

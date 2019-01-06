@@ -1,5 +1,6 @@
 from collections.abc import Sized
 from pyds.DoublyLinkedList import DoublyLinkedList
+from pyds.exception import EmptyQueue
 
 class SimpleQueue(Sized):
     """Implement a sinple queue by adapting a DoublyLinkedList."""
@@ -7,6 +8,7 @@ class SimpleQueue(Sized):
     def __init__(self):
         """Constructor."""
         self._list = DoublyLinkedList()
+        self._list._empty_list = EmptyQueue
 
     def __len__(self):
         """Return list size."""

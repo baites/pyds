@@ -1,5 +1,5 @@
 from pyds.SimpleQueue import SimpleQueue
-from pyds.exception import EmptyList
+from pyds.exception import EmptyQueue
 import pytest
 
 import random
@@ -14,7 +14,7 @@ def test_empty_queue():
     """Test empty queue behavior."""
     q = SimpleQueue()
     assert len(q) == 0
-    with pytest.raises(EmptyList):
+    with pytest.raises(EmptyQueue):
         q.dequeue()
 
 
