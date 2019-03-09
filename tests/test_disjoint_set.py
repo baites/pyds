@@ -13,7 +13,14 @@ def test_disjoint_set_initialization():
         assert ds.find(i) == i
         assert ds.size(i) == 1
 
-
+def test_disjoint_set_add():
+    ds = DisjointSet()
+    for i in range(10):
+        ds.add(i)
+    for i in range(10):
+        assert ds.find(i) == i
+        assert ds.size(i) == 1
+    
 def test_disjoint_set_union():
     """Test disjoint set union."""
     ds = DisjointSet(range(10))

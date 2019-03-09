@@ -13,7 +13,7 @@ class DisjointSetNode:
 class DisjointSet:
     """Implement a disjoin set."""
 
-    def __init__(self, iterable):
+    def __init__(self, iterable=[]):
         """Constructor."""
         self._node = {
             key: DisjointSetNode(key) for key in iterable
@@ -21,7 +21,7 @@ class DisjointSet:
 
     def add(self, key):
         """Add a new set with one key."""
-        self._node[key] = DisjointSetNode(item)
+        self._node[key] = DisjointSetNode(key)
 
     def find(self, key):
         """Find parent key of a given key."""
