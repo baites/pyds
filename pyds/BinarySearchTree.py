@@ -68,15 +68,15 @@ class TreeNode(abc.ABC):
     def min(self):
         """Return the node min key."""
         node = self
-        while self.left is not None:
-            node = self.left
+        while node.left is not None:
+            node = node.left
         return node
 
     def max(self):
         """Return the node max key."""
         node = self
-        while self.right is not None:
-            node = self.right
+        while node.right is not None:
+            node = node.right
         return node
 
     def next(self):
@@ -313,12 +313,72 @@ class AVLBinarySearchTree(BinarySeachTree):
             deleted = node.delete()
         self._rebalance(deleted.parent)
 
+    @staticmethod
+    def _merge_at_root(node1, node2, root):
+        """Merge two node to a common root."""
+        if abs(node1.height - node2.height) <= 1:
+            root.left = node1
+            root.right = node2
+            node1.parent = root
+            node2.parent = root
+            root.height = max(
+                node1.height, node2.height
+            ) + 1
+            return root
+        elif node1.height > node2.height:
+            temp = self._merge_at_root(
+                node1.right, node2, root
+            )
+            node1.right = temp
+            temp.parent = node1
+            self._rebalance(node1)
+            return root
+        elif node1.height < node2.height:
+            temp = self._merge_at_root(
+                node1, node2.right, root
+            )
+            node2.right = temp
+            temp.parent = node2
+            self._rebalance(node2)
+            return root
+
+    @staticmethod
+    def _merge_at_root2(node1, node2, root):
+        root.left = node1
+        root.right = node2
+        node1.parent = root
+        node2.parent = root
+        root.height = max(
+            node1.height, node2.height
+        ) + 1
+        return root
+
+
+    def merge(self, tree):
+        """Merge avl tree to self."""
+        root = self.root.max()
+        root = root.delete()
+        self.root = self._merge_at_root(
+            self.root, tree.root, root
+        )
+
 
 import random
 
 #tree = SimpleBinarySearchTree()
-tree = AVLBinarySearchTree()
+tree1 = AVLBinarySearchTree()
+tree2 = AVLBinarySearchTree()
 
-for i in range(40):
-    tree.insert(random.randint(1,200))
-print(tree)
+for i in range(9):
+    #tree1.insert(random.randint(1,200))
+    tree1.insert(i)
+print(tree1)
+print()
+for i in range(9,14):
+    #tree2.insert(random.randint(1,200))
+    tree2.insert(i)
+print(tree2)
+print()
+
+tree1.merge(tree2)
+print(tree1)
