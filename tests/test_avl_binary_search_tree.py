@@ -109,4 +109,4 @@ def test_fast_merge_separated_bigger_right():
         print(tree2)
         tree1.merge(tree2)
         print(tree1)
-        #assert_search_binary_tree_invariance(keys, tree1)
+        assert_search_binary_tree_invariance(keys, tree1)
