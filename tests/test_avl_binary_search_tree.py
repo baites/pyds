@@ -6,7 +6,7 @@ import random
 
 tree_inserts = 100
 tree_deletes = tree_inserts//2
-tree_merges = 30
+tree_merges = 1
 min_key = 1
 max_key = 100
 stress_iterations = 10
@@ -81,3 +81,32 @@ def test_delete():
         assert_deleted_node(node)
         assert_search_binary_tree_invariance(keys, tree)
         assert_avl_invariance(keys, tree)
+
+
+def test_fast_merge_separated_bigger_right():
+    """Test merge to the left operation."""
+    # Populate trees
+    for i in range(tree_merges):
+        # Create tree to be merge
+        tree1 = AVLBinarySearchTree()
+        keys = set()
+        for i in range(tree_inserts):
+            key = random.randint(
+                min_key, (max_key-min_key)//2+min_key
+            )
+            keys.add(key)
+            tree1.insert(AVLBinarySearchTreeNode(key))
+        tree2 = AVLBinarySearchTree()
+        for i in range(tree_inserts):
+            key = random.randint(
+                (max_key-min_key)//2+min_key+1, max_key
+            )
+            keys.add(key)
+            tree2.insert(AVLBinarySearchTreeNode(key))
+        print()
+        print(tree1)
+        print()
+        print(tree2)
+        tree1.merge(tree2)
+        print(tree1)
+        #assert_search_binary_tree_invariance(keys, tree1)

@@ -54,11 +54,11 @@ class SimpleBinarySearchTree(BinarySearchTree):
         return deleted
 
     @staticmethod
-    def _merge_at_root(node1, node2, root):
-        root.left = node1
-        root.right = node2
-        node1.parent = root
-        node2.parent = root
+    def _merge_at_root(lnode, rnode, root):
+        root.left = lnode
+        root.right = rnode
+        lnode.parent = root
+        rnode.parent = root
         root.update()
         return root
 

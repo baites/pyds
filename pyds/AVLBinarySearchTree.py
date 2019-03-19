@@ -119,50 +119,57 @@ class AVLBinarySearchTree(BinarySearchTree):
         deleted.parent = None
         return deleted
 
-    def _merge_at_root(self, node1, node2, root):
+    def _merge_at_root(self, lnode, rnode, root):
         """Merge two node to a common root."""
-        if abs(node1.height - node2.height) <= 1:
-            print(node1.key, node1.height, node1.key , node2.height, root.key, root.parent)
-            root.left = node1
-            root.right = node2
-            node1.parent = root
-            node2.parent = root
+        if abs(lnode.height - rnode.height) <= 1:
+            root.left = lnode
+            root.right = rnode
+            lnode.parent = root
+            rnode.parent = root
             root.update()
             return root
-        elif node1.height > node2.height:
-            root = self._merge_at_root(
-                node1.right, node2, root
+        elif lnode.height > rnode.height:
+            root = cls._merge_at_root(
+                lnode.right, rnode, root
             )
-            node1.right = root
-            root.parent = node1
-            self._rebalance(node1)
-            return node1
-        elif node1.height < node2.height:
-            root = self._merge_at_root(
-                node1, node2.left, root
+            lnode.right = root
+            root.parent = lnode
+            self._rebalance(lnode)
+            return lnode
+        elif lnode.height < rnode.height:
+            root = cls._merge_at_root(
+                lnode, rnode.left, root
             )
-            node2.left = root
-            root.parent = node2
-            self._rebalance(node2)
-            return node2
+            rnode.left = root
+            root.parent = rnode
+            self._rebalance(rnode)
+            return rnode
 
-    @staticmethod
-    def _merge_at_root2(node1, node2, root):
-        root.left = node1
-        root.right = node2
-        node1.parent = root
-        node2.parent = root
-        root.update()
-        return root
-
-    def merge(self, tree):
-        """Merge avl tree to self."""
-        root = self._root.max()
-        mintree = tree.min()
-        if not root.key < mintree.key:
-            raise ValueError('input tree is not separated')
-        root.delete()
-        self._root = self._merge_at_root(
-            self._root, tree.root, root
+    def _fast_merge_trees(self, ltree, rtree):
+        """Merge avl separated and larger rtree to ltree."""
+        root = ltree._root.max()
+        ltree.delete(root.key)
+        ltree._root = self._merge_at_root(
+            ltree._root, rtree.root, root
         )
-        tree.root = None
+        rtree._root = None
+
+    def _slow_merge_trees(self, ltree, rtree):
+        """Merge slow but all type of trees."""
+        node = rtree.min()
+        while node is not None:
+            key = node.key
+            node = rtree.delete(key)
+            ltree.insert(node)
+            node = rtree.min()
+        
+    def merge(self, tree):
+        """Merge tree to self."""
+        if self._root is None or tree._root is None:
+            return
+        rootmax = self._root.max()
+        treemin = tree.min()
+        if rootmax.key < treemin.key:
+            self._fast_merge_trees(self, tree)
+        else:
+            self._slow_merge_trees(self, tree)

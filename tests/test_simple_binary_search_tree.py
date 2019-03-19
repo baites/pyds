@@ -72,8 +72,8 @@ def test_delete():
         assert_search_binary_tree_invariance(keys, tree)
 
 
-def test_merge_to_left():
-    """Test merge to the left operation."""
+def test_fast_merge_separated_bigger_right():
+    """Test fast merge separated tree bigger on the right."""
     # Populate trees
     for i in range(tree_merges):
         # Create tree to be merge
@@ -96,8 +96,8 @@ def test_merge_to_left():
         assert_search_binary_tree_invariance(keys, tree1)
 
 
-def test_slow_merge_to_right():
-    """Test merge to the right operation."""
+def test_slow_merge_separated_smaller_right():
+    """Test slow merge separated tree smaller on the right."""
     # Populate trees
     for i in range(tree_merges):
         # Create tree to be merge
@@ -120,8 +120,8 @@ def test_slow_merge_to_right():
         assert_search_binary_tree_invariance(keys, tree1)
 
 
-def test_slow_merge():
-    """Test slow merge operation."""
+def test_slow_merge_overlapped_trees():
+    """Test slow merge for overlapping trees."""
     # Populate trees
     for i in range(tree_merges):
         # Create tree to be merge
