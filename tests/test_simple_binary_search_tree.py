@@ -1,5 +1,5 @@
 
-from pyds.BinarySearchTree import BinarySearchTree
+from pyds.SimpleBinarySearchTree import SimpleBinarySearchTreeNode
 from pyds.SimpleBinarySearchTree import SimpleBinarySearchTree
 import random
 
@@ -46,7 +46,7 @@ def test_insert():
     for i in range(tree_inserts):
         key = random.randint(min_key, max_key)
         keys.add(key)
-        tree.insert(key)
+        tree.insert(SimpleBinarySearchTreeNode(key))
     # Assert basic tree conditions
     assert_search_binary_tree_invariance(keys, tree)
 
@@ -60,7 +60,7 @@ def test_delete():
     for i in range(tree_inserts):
         key = random.randint(min_key, max_key)
         keys.add(key)
-        tree.insert(key)
+        tree.insert(SimpleBinarySearchTreeNode(key))
     # Assert tree invariances after multiple deletions
     for n in range(tree_inserts-1, tree_deletes-1, -1):
         # Delete one node
@@ -84,14 +84,14 @@ def test_merge_to_left():
                 min_key, (max_key-min_key)//2+min_key
             )
             keys.add(key)
-            tree1.insert(key)
+            tree1.insert(SimpleBinarySearchTreeNode(key))
         tree2 = SimpleBinarySearchTree()
         for i in range(tree_inserts):
             key = random.randint(
                 (max_key-min_key)//2+min_key+1, max_key
             )
             keys.add(key)
-            tree2.insert(key)
+            tree2.insert(SimpleBinarySearchTreeNode(key))
         tree1.merge(tree2)
         assert_search_binary_tree_invariance(keys, tree1)
 
@@ -108,14 +108,14 @@ def test_slow_merge_to_right():
                 (max_key-min_key)//2+min_key+1, max_key
             )
             keys.add(key)
-            tree1.insert(key)
+            tree1.insert(SimpleBinarySearchTreeNode(key))
         tree2 = SimpleBinarySearchTree()
         for i in range(tree_inserts):
             key = random.randint(
                 min_key, (max_key-min_key)//2+min_key
             )
             keys.add(key)
-            tree2.insert(key)
+            tree2.insert(SimpleBinarySearchTreeNode(key))
         tree1.merge(tree2)
         assert_search_binary_tree_invariance(keys, tree1)
 
@@ -130,11 +130,11 @@ def test_slow_merge():
         for i in range(tree_inserts):
             key = random.randint(min_key, max_key)
             keys.add(key)
-            tree1.insert(key)
+            tree1.insert(SimpleBinarySearchTreeNode(key))
         tree2 = SimpleBinarySearchTree()
         for i in range(tree_inserts):
             key = random.randint(min_key, max_key)
             keys.add(key)
-            tree2.insert(key)
+            tree2.insert(SimpleBinarySearchTreeNode(key))
         tree1.merge(tree2)
         assert_search_binary_tree_invariance(keys, tree1)

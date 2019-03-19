@@ -17,20 +17,19 @@ class SimpleBinarySearchTreeNode(BinarySearchTreeNode):
 class SimpleBinarySearchTree(BinarySearchTree):
     """Implement a simple BST."""
 
-    def __init__(self, nodetype=SimpleBinarySearchTreeNode):
+    def __init__(self):
         """Constructor."""
-        super().__init__(nodetype)
+        super().__init__()
 
-    def insert(self, key, *args, **kwargs):
+    def insert(self, node):
         """Insert a node in the tree."""
         # Call BST insert first
-        super().insert(key, *args, **kwargs)
+        super().insert(node)
         # Implement insert operation
-        node = self.nodetype(key, *args, **kwargs)
-        if self.root is None:
-            self.root = node
+        if self._root is None:
+            self._root = node
         else:
-            self.root._insert(node)
+            self._root._insert(node)
 
     def delete(self, key):
         """Delete a node from the tree."""
@@ -41,14 +40,14 @@ class SimpleBinarySearchTree(BinarySearchTree):
         deleted = None
         if not key == node.key:
             return deleted
-        if node is self.root:
+        if node is self._root:
             pseudoroot = BinarySearchTreeNode(None)
-            pseudoroot.left = self.root
-            self.root.parent = pseudoroot
-            deleted = self.root._delete()
-            self.root = pseudoroot.left
-            if self.root is not None:
-                self.root.parent = None
+            pseudoroot.left = self._root
+            self._root.parent = pseudoroot
+            deleted = self._root._delete()
+            self._root = pseudoroot.left
+            if self._root is not None:
+                self._root.parent = None
         else:
             deleted = node._delete()
         return deleted
@@ -65,12 +64,12 @@ class SimpleBinarySearchTree(BinarySearchTree):
     @classmethod
     def _fast_merge_trees(cls, ltree, rtree):
         """Merge fast for separated trees."""
-        root = ltree.root.max()
+        root = ltree._root.max()
         ltree.delete(root.key)
-        ltree.root = cls._merge_at_root(
-            ltree.root, rtree.root, root
+        ltree._root = cls._merge_at_root(
+            ltree._root, rtree._root, root
         )
-        rtree.root = None
+        rtree._root = None
 
     @classmethod
     def _slow_merge_trees(cls, ltree, rtree):
@@ -78,15 +77,15 @@ class SimpleBinarySearchTree(BinarySearchTree):
         node = rtree.min()
         while node is not None:
             key = node.key
-            rtree.delete(key)
-            ltree.insert(key)
+            node = rtree.delete(key)
+            ltree.insert(node)
             node = rtree.min()
 
     def merge(self, tree):
         """Merge tree to self."""
-        if self.root is None or tree.root is None:
+        if self._root is None or tree._root is None:
             return
-        rootmax = self.root.max()
+        rootmax = self._root.max()
         treemin = tree.min()
         if rootmax.key < treemin.key:
             self._fast_merge_trees(self, tree)

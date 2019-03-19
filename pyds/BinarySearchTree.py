@@ -131,20 +131,19 @@ class BinarySearchTreeNode(abc.ABC):
 class BinarySearchTree(abc.ABC):
     """Implement a base class for binary trees."""
 
-    def __init__(self, nodetype):
+    def __init__(self):
         """Constructor."""
-        self.root = None
-        self.nodetype = nodetype
+        self._root = None
 
     def __str__(self):
         """Print the tree."""
-        if self.root is None:
+        if self._root is None:
             return '<empty tree>'
-        return str(self.root)
+        return str(self._root)
 
     def find(self, key):
         """Finds and returns the node with given key."""
-        return self.root and self.root.find(key)
+        return self._root and self._root.find(key)
 
     def next(self, key):
         """Returns the node that contains the next larger key."""
@@ -153,18 +152,23 @@ class BinarySearchTree(abc.ABC):
 
     def min(self):
         """Returns the minimum node in the tree."""
-        return self.root and self.root.min()
+        return self._root and self._root.min()
 
     def max(self):
         """Returns the minimum node in the tree."""
-        return self.root and self.root.max()
+        return self._root and self._root.max()
 
     @abc.abstractmethod
-    def insert(self, key):
+    def insert(self, node):
         """Define insert API."""
-        return self
+        pass
 
     @abc.abstractmethod
     def delete(self, key):
         """Define insert API."""
         return self
+
+    @property
+    def root(self):
+        """Return root as read-only property."""
+        return self._root
