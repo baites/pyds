@@ -3,7 +3,7 @@
 import abc
 
 
-class TreeNode(abc.ABC):
+class BinarySearchTreeNode(abc.ABC):
     """Implement a base class for a tree node."""
 
     def __init__(self, key):
@@ -54,16 +54,21 @@ class TreeNode(abc.ABC):
 
     def find(self, key):
         """Find node with given key."""
-        if key == self.key:
-            return self
-        elif key < self.key:
-            if self.left is not None:
-                return self.left.find(key)
-            return self
-        else:
-            if self.right is not None:
-                return self.right.find(key)
-            return self
+        node = self
+        while 1:
+            if key == node.key:
+                break
+            elif key < node.key:
+                if node.left is not None:
+                    node = node.left
+                else:
+                    break
+            else:
+                if node.right is not None:
+                    node = node.right
+                else:
+                    break
+        return node
 
     def min(self):
         """Return the node min key."""
@@ -88,42 +93,42 @@ class TreeNode(abc.ABC):
             node = node.parent
         return node.parent
 
-    def insert(self, node):
+    def _insert(self, node):
         """Inserts a node into the subtree rooted at this node."""
-        if node is None:
+        parent = self.find(node.key)
+        if node.key == parent.key:
             return
-        if node.key < self.key:
-            if self.left is None:
-                node.parent = self
-                self.left = node
-            else:
-                self.left.insert(node)
+        if node.key < parent.key:
+            parent.left = node
         else:
-            if self.right is None:
-                node.parent = self
-                self.right = node
+            parent.right = node
+        node.parent = parent
+
+    def _delete(self):
+        """Deletes and returns this node from subtree rooted at this node."""
+        node = self
+        while 1:
+            if node.left is None or node.right is None:
+                if node is node.parent.left:
+                    node.parent.left = node.left or node.right
+                    if node.parent.left is not None:
+                        node.parent.left.parent = node.parent
+                else:
+                    node.parent.right = node.left or node.right
+                    if node.parent.right is not None:
+                        node.parent.right.parent = node.parent
+                node.parent = None
+                node.left = None
+                node.right = None
+                break
             else:
-                self.right.insert(node)
-
-    def delete(self):
-        """Deletes and returns this node from the tree."""
-        if self.left is None or self.right is None:
-            if self is self.parent.left:
-                self.parent.left = self.left or self.right
-                if self.parent.left is not None:
-                    self.parent.left.parent = self.parent
-            else:
-                self.parent.right = self.left or self.right
-                if self.parent.right is not None:
-                    self.parent.right.parent = self.parent
-            return self
-        else:
-            next = self.next()
-            self.key, next.key = next.key, self.key
-            return next.delete()
+                next = node.next()
+                node.key, next.key = next.key, node.key
+                node = next
+        return node
 
 
-class BinarySeachTree(abc.ABC):
+class BinarySearchTree(abc.ABC):
     """Implement a base class for binary trees."""
 
     def __init__(self, nodetype):
@@ -157,228 +162,9 @@ class BinarySeachTree(abc.ABC):
     @abc.abstractmethod
     def insert(self, key):
         """Define insert API."""
-        pass
+        return self
 
     @abc.abstractmethod
     def delete(self, key):
         """Define insert API."""
-        pass
-
-
-class SimpleTreeNode(TreeNode):
-    """Implement a simple tree node."""
-    def __init__(self, key):
-        """Constructor."""
-        super().__init__(key)
-
-    def update(self):
-        """No need for update in a simple node."""
-        pass
-
-
-class SimpleBinarySearchTree(BinarySeachTree):
-    """Implement a simple BST."""
-
-    def __init__(self, nodetype=SimpleTreeNode):
-        """Constructor."""
-        super().__init__(nodetype)
-
-    def insert(self, key, *args, **kwargs):
-        """Insert a node in the tree."""
-        node = self.nodetype(key, *args, **kwargs)
-        if self.root is None:
-            self.root = node
-        else:
-            self.root.insert(node)
-
-    def delete(self, key):
-        """Delete a node from the tree."""
-        node = self.find(key)
-        if node is None:
-            return None
-        if node is self.root:
-            pseudoroot = TreeNode(None)
-            pseudoroot.left = self.root
-            self.root.parent = pseudoroot
-            deleted = self.root.delete()
-            self.root = pseudoroot.left
-            if self.root is not None:
-                self.root.parent = None
-        else:
-            deleted = node.delete()
-
-
-class AVLTreeNode(TreeNode):
-    """Implement an avl compatible node."""
-
-    def __init__(self, key):
-        """Constructor."""
-        super().__init__(key)
-        self.heigh = None
-
-    def update(self):
-        """Update the height after rebalancing."""
-        left = self.left.height if self.left is not None else -1
-        right = self.right.height if self.right is not None else -1
-        self.height = max(left, right) + 1
-
-
-class AVLBinarySearchTree(BinarySeachTree):
-    """Implement an AVL BST."""
-
-    def __init__(self, nodetype=AVLTreeNode):
-        """Constructor."""
-        super().__init__(nodetype)
-
-    @staticmethod
-    def _height(node):
-        return node.height if node is not None else -1
-
-    def _left_rotate(self, x):
-        y = x.right
-        y.parent = x.parent
-        if y.parent is None:
-            self.root = y
-        else:
-            if y.parent.left is x:
-                y.parent.left = y
-            elif y.parent.right is x:
-                y.parent.right = y
-        x.right = y.left
-        if x.right is not None:
-            x.right.parent = x
-        y.left = x
-        x.parent = y
-        x.update()
-        y.update()
-
-    def _right_rotate(self, x):
-        y = x.left
-        y.parent = x.parent
-        if y.parent is None:
-            self.root = y
-        else:
-            if y.parent.left is x:
-                y.parent.left = y
-            elif y.parent.right is x:
-                y.parent.right = y
-        x.left = y.right
-        if x.left is not None:
-            x.left.parent = x
-        y.right = x
-        x.parent = y
-        x.update()
-        y.update()
-
-    def _rebalance(self, node):
-        while node is not None:
-            node.update()
-            if self._height(node.left) >= 2 + self._height(node.right):
-                if self._height(node.left.left) >= self._height(node.left.right):
-                    self._right_rotate(node)
-                else:
-                    self._left_rotate(node.left)
-                    self._right_rotate(node)
-            elif self._height(node.right) >= 2 + self._height(node.left):
-                if self._height(node.right.right) >= self._height(node.right.left):
-                    self._left_rotate(node)
-                else:
-                    self._right_rotate(node.right)
-                    self._left_rotate(node)
-            node = node.parent
-
-    def insert(self, key, *args, **kwargs):
-        """Insert a node in the tree."""
-        node = self.nodetype(key, *args, **kwargs)
-        if self.root is None:
-            self.root = node
-        else:
-            self.root.insert(node)
-        self._rebalance(node)
-
-    def delete(self, key):
-        """Delete a node from the tree."""
-        node = self.find(key)
-        if node is None:
-            return None
-        if node is self.root:
-            pseudoroot = AVLTreeNode(None)
-            pseudoroot.left = self.root
-            self.root.parent = pseudoroot
-            deleted = self.root.delete()
-            self.root = pseudoroot.left
-            if self.root is not None:
-                self.root.parent = None
-        else:
-            deleted = node.delete()
-        self._rebalance(deleted.parent)
-
-    @staticmethod
-    def _merge_at_root(node1, node2, root):
-        """Merge two node to a common root."""
-        if abs(node1.height - node2.height) <= 1:
-            root.left = node1
-            root.right = node2
-            node1.parent = root
-            node2.parent = root
-            root.height = max(
-                node1.height, node2.height
-            ) + 1
-            return root
-        elif node1.height > node2.height:
-            temp = self._merge_at_root(
-                node1.right, node2, root
-            )
-            node1.right = temp
-            temp.parent = node1
-            self._rebalance(node1)
-            return root
-        elif node1.height < node2.height:
-            temp = self._merge_at_root(
-                node1, node2.right, root
-            )
-            node2.right = temp
-            temp.parent = node2
-            self._rebalance(node2)
-            return root
-
-    @staticmethod
-    def _merge_at_root2(node1, node2, root):
-        root.left = node1
-        root.right = node2
-        node1.parent = root
-        node2.parent = root
-        root.height = max(
-            node1.height, node2.height
-        ) + 1
-        return root
-
-
-    def merge(self, tree):
-        """Merge avl tree to self."""
-        root = self.root.max()
-        root = root.delete()
-        self.root = self._merge_at_root(
-            self.root, tree.root, root
-        )
-
-
-import random
-
-#tree = SimpleBinarySearchTree()
-tree1 = AVLBinarySearchTree()
-tree2 = AVLBinarySearchTree()
-
-for i in range(9):
-    #tree1.insert(random.randint(1,200))
-    tree1.insert(i)
-print(tree1)
-print()
-for i in range(9,14):
-    #tree2.insert(random.randint(1,200))
-    tree2.insert(i)
-print(tree2)
-print()
-
-tree1.merge(tree2)
-print(tree1)
+        return self
