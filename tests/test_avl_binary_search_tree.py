@@ -6,7 +6,7 @@ import random
 
 tree_inserts = 100
 tree_deletes = tree_inserts//2
-tree_merges = 1
+tree_merges = 30
 min_key = 1
 max_key = 100
 stress_iterations = 10
@@ -84,29 +84,70 @@ def test_delete():
 
 
 def test_fast_merge_separated_bigger_right():
-    """Test merge to the left operation."""
+    """Test fast merge separated tree bigger on the right."""
     # Populate trees
     for i in range(tree_merges):
         # Create tree to be merge
-        tree1 = AVLBinarySearchTree()
+        ltree = AVLBinarySearchTree()
         keys = set()
         for i in range(tree_inserts):
             key = random.randint(
                 min_key, (max_key-min_key)//2+min_key
             )
             keys.add(key)
-            tree1.insert(AVLBinarySearchTreeNode(key))
-        tree2 = AVLBinarySearchTree()
+            ltree.insert(AVLBinarySearchTreeNode(key))
+        rtree = AVLBinarySearchTree()
         for i in range(tree_inserts):
             key = random.randint(
                 (max_key-min_key)//2+min_key+1, max_key
             )
             keys.add(key)
-            tree2.insert(AVLBinarySearchTreeNode(key))
-        print()
-        print(tree1)
-        print()
-        print(tree2)
-        tree1.merge(tree2)
-        print(tree1)
-        assert_search_binary_tree_invariance(keys, tree1)
+            rtree.insert(AVLBinarySearchTreeNode(key))
+        ltree.merge(rtree)
+        assert_search_binary_tree_invariance(keys, ltree)
+        assert_avl_invariance(keys, ltree)
+
+def test_slow_merge_separated_smaller_right():
+    """Test slow merge separated tree smaller on the right."""
+    # Populate trees
+    for i in range(tree_merges):
+        # Create tree to be merge
+        ltree = AVLBinarySearchTree()
+        keys = set()
+        for i in range(tree_inserts):
+            key = random.randint(
+                (max_key-min_key)//2+min_key+1, max_key
+            )
+            keys.add(key)
+            ltree.insert(AVLBinarySearchTreeNode(key))
+        rtree = AVLBinarySearchTree()
+        for i in range(tree_inserts):
+            key = random.randint(
+                min_key, (max_key-min_key)//2+min_key
+            )
+            keys.add(key)
+            rtree.insert(AVLBinarySearchTreeNode(key))
+        ltree.merge(rtree)
+        assert_search_binary_tree_invariance(keys, ltree)
+        assert_avl_invariance(keys, ltree)
+
+
+def test_slow_merge_overlapped_trees():
+    """Test slow merge for overlapping trees."""
+    # Populate trees
+    for i in range(tree_merges):
+        # Create tree to be merge
+        ltree = AVLBinarySearchTree()
+        keys = set()
+        for i in range(tree_inserts):
+            key = random.randint(min_key, max_key)
+            keys.add(key)
+            ltree.insert(AVLBinarySearchTreeNode(key))
+        rtree = AVLBinarySearchTree()
+        for i in range(tree_inserts):
+            key = random.randint(min_key, max_key)
+            keys.add(key)
+            rtree.insert(AVLBinarySearchTreeNode(key))
+        ltree.merge(rtree)
+        assert_search_binary_tree_invariance(keys, ltree)
+        assert_avl_invariance(keys, ltree)

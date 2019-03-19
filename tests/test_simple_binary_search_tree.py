@@ -77,23 +77,23 @@ def test_fast_merge_separated_bigger_right():
     # Populate trees
     for i in range(tree_merges):
         # Create tree to be merge
-        tree1 = SimpleBinarySearchTree()
+        ltree = SimpleBinarySearchTree()
         keys = set()
         for i in range(tree_inserts):
             key = random.randint(
                 min_key, (max_key-min_key)//2+min_key
             )
             keys.add(key)
-            tree1.insert(SimpleBinarySearchTreeNode(key))
-        tree2 = SimpleBinarySearchTree()
+            ltree.insert(SimpleBinarySearchTreeNode(key))
+        rtree = SimpleBinarySearchTree()
         for i in range(tree_inserts):
             key = random.randint(
                 (max_key-min_key)//2+min_key+1, max_key
             )
             keys.add(key)
-            tree2.insert(SimpleBinarySearchTreeNode(key))
-        tree1.merge(tree2)
-        assert_search_binary_tree_invariance(keys, tree1)
+            rtree.insert(SimpleBinarySearchTreeNode(key))
+        ltree.merge(rtree)
+        assert_search_binary_tree_invariance(keys, ltree)
 
 
 def test_slow_merge_separated_smaller_right():
@@ -101,23 +101,23 @@ def test_slow_merge_separated_smaller_right():
     # Populate trees
     for i in range(tree_merges):
         # Create tree to be merge
-        tree1 = SimpleBinarySearchTree()
+        ltree = SimpleBinarySearchTree()
         keys = set()
         for i in range(tree_inserts):
             key = random.randint(
                 (max_key-min_key)//2+min_key+1, max_key
             )
             keys.add(key)
-            tree1.insert(SimpleBinarySearchTreeNode(key))
-        tree2 = SimpleBinarySearchTree()
+            ltree.insert(SimpleBinarySearchTreeNode(key))
+        rtree = SimpleBinarySearchTree()
         for i in range(tree_inserts):
             key = random.randint(
                 min_key, (max_key-min_key)//2+min_key
             )
             keys.add(key)
-            tree2.insert(SimpleBinarySearchTreeNode(key))
-        tree1.merge(tree2)
-        assert_search_binary_tree_invariance(keys, tree1)
+            rtree.insert(SimpleBinarySearchTreeNode(key))
+        ltree.merge(rtree)
+        assert_search_binary_tree_invariance(keys, ltree)
 
 
 def test_slow_merge_overlapped_trees():
@@ -125,16 +125,16 @@ def test_slow_merge_overlapped_trees():
     # Populate trees
     for i in range(tree_merges):
         # Create tree to be merge
-        tree1 = SimpleBinarySearchTree()
+        ltree = SimpleBinarySearchTree()
         keys = set()
         for i in range(tree_inserts):
             key = random.randint(min_key, max_key)
             keys.add(key)
-            tree1.insert(SimpleBinarySearchTreeNode(key))
-        tree2 = SimpleBinarySearchTree()
+            ltree.insert(SimpleBinarySearchTreeNode(key))
+        rtree = SimpleBinarySearchTree()
         for i in range(tree_inserts):
             key = random.randint(min_key, max_key)
             keys.add(key)
-            tree2.insert(SimpleBinarySearchTreeNode(key))
-        tree1.merge(tree2)
-        assert_search_binary_tree_invariance(keys, tree1)
+            rtree.insert(SimpleBinarySearchTreeNode(key))
+        ltree.merge(rtree)
+        assert_search_binary_tree_invariance(keys, ltree)
