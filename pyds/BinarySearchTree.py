@@ -117,7 +117,6 @@ class BinarySearchTreeNode(abc.ABC):
                     node.parent.right = node.left or node.right
                     if node.parent.right is not None:
                         node.parent.right.parent = node.parent
-                node.parent = None
                 node.left = None
                 node.right = None
                 break

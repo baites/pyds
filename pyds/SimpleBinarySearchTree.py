@@ -50,6 +50,7 @@ class SimpleBinarySearchTree(BinarySearchTree):
                 self._root.parent = None
         else:
             deleted = node._delete()
+        deleted.parent = None
         return deleted
 
     @staticmethod
