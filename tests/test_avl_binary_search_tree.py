@@ -107,8 +107,8 @@ def test_fast_merge_separated_bigger_right():
         assert_search_binary_tree_invariance(keys, ltree)
         assert_avl_invariance(keys, ltree)
 
-def test_slow_merge_separated_smaller_right():
-    """Test slow merge separated tree smaller on the right."""
+def test_fast_merge_separated_bigger_left():
+    """Test slow merge separated tree bigger on the left."""
     # Populate trees
     for i in range(tree_merges):
         # Create tree to be merge

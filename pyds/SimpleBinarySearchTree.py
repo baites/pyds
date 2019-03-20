@@ -87,8 +87,14 @@ class SimpleBinarySearchTree(BinarySearchTree):
         if self._root is None or tree._root is None:
             return
         rootmax = self._root.max()
+        rootmin = self._root.min()
+        treemax = tree.max()
         treemin = tree.min()
         if rootmax.key < treemin.key:
             self._fast_merge_trees(self, tree)
+        elif treemax.key < rootmin.key:
+            self._fast_merge_trees(tree, self)
+            self._root = tree._root
+            tree._root = None
         else:
             self._slow_merge_trees(self, tree)

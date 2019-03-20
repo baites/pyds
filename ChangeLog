@@ -1,6 +1,17 @@
 CHANGES
 =======
 
+* First functional of simple and avl tree with merge
+* cleanning the implementation and adding generic but slow merge
+* cleanning the implementation and adding generic but slow merge
+* Implementing insert and delete for AVL tree plus testing
+* Updating the API to inser directly nodes
+* First functional binary tree version
+* Working BST implementation
+* Adding first implementation of AVL
+* Bug fix
+* Implementing disjoint set
+* Dependency injection to override the exception whem implementing simple queue
 * Adding simple queue implementation with single list
 * Adding back() in SinglyLinkedList that is O(1)
 * Implementing priority queue

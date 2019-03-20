@@ -1,4 +1,5 @@
 pbr
 pdoc
 pytest
+stickytape
 tox
