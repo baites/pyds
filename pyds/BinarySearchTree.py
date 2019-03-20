@@ -12,10 +12,11 @@ class BinarySearchTreeNode(abc.ABC):
         self.parent = None
         self.left = None
         self.right = None
+        self.nodelabel = lambda node: str(node.key)
 
     def _str(self):
         """Internal method for ASCII art."""
-        label = str(self.key)
+        label = self.nodelabel(self)
         if self.left is None:
             left_lines, left_pos, left_width = [], 0, 0
         else:
@@ -166,6 +167,16 @@ class BinarySearchTree(abc.ABC):
     def delete(self, key):
         """Define insert API."""
         return self
+
+    @abc.abstractmethod
+    def merge(self, tree):
+        """Merge tree to self."""
+        pass
+
+    #@abc.abstractmethod
+    #def split(self, key):
+    #    """Split self returning right side."""
+    #    return self
 
     @property
     def root(self):
