@@ -160,7 +160,11 @@ def test_split_tree():
                 lkeys.add(key)
             else:
                 rkeys.add(key)
+        # Check invariances for ltree
         assert_search_binary_tree_invariance(lkeys, ltree)
+        # Check invariances for rtree
         assert_search_binary_tree_invariance(rkeys, rtree)
+        # Merge the tree
         ltree.merge(rtree)
+        # Check invariance of merged tree
         assert_search_binary_tree_invariance(lkeys | rkeys, ltree)

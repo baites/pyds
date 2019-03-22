@@ -4,11 +4,11 @@ from pyds.AVLBinarySearchTree import AVLBinarySearchTree
 import random
 
 
-tree_inserts = 20
+tree_inserts = 100
 tree_deletes = tree_inserts//2
 tree_ops = 50
 min_key = 1
-max_key = 20
+max_key = 100
 stress_iterations = 10
 
 
@@ -222,12 +222,11 @@ def test_split_tree():
             keys.add(key)
             akeys.append(key)
             ltree.insert(AVLBinarySearchTreeNode(key))
+        # Select separation key
         skey = random.sample(keys, k=1)[0]
-        print(akeys)
-        print(ltree)
-        print(skey)
-#        print()
+        # Split the tree
         rtree = ltree.split(skey)
+        # Split the set of keys
         lkeys = set()
         rkeys = set()
         for key in keys:
@@ -235,15 +234,14 @@ def test_split_tree():
                 lkeys.add(key)
             else:
                 rkeys.add(key)
-#        print(ltree)
-#        print()
-#        print(rtree)
+        # Check invariances for ltree
         assert_search_binary_tree_invariance(lkeys, ltree)
-#        assert_avl_invariance(lkeys, ltree)
-#        assert_search_binary_tree_invariance(rkeys, rtree)
-#        assert_avl_invariance(rkeys, rtree)
-        #ltree.merge(rtree)
-        #print()
-        #print(ltree)
-        #assert_search_binary_tree_invariance(lkeys | rkeys, ltree)
-        #assert_avl_invariance(lkeys | rkeys, ltree)
+        assert_avl_invariance(lkeys, ltree)
+        # Check invariances for rtree
+        assert_search_binary_tree_invariance(rkeys, rtree)
+        assert_avl_invariance(rkeys, rtree)
+        # Merge the tree
+        ltree.merge(rtree)
+        # Check invariance of merged tree
+        assert_search_binary_tree_invariance(lkeys | rkeys, ltree)
+        assert_avl_invariance(lkeys | rkeys, ltree)

@@ -33,12 +33,13 @@ class AVLBinarySearchTree(SimpleBinarySearchTree):
         """Constructor."""
         super().__init__(root)
 
-
     @staticmethod
     def _height(node):
+        """Enhance the definition of height to cover null nodes."""
         return node._height if node is not None else -1
 
     def _left_rotate(self, x):
+        """Implement AVL left rotation."""
         y = x.right
         y.parent = x.parent
         if y.parent is None:
@@ -57,6 +58,7 @@ class AVLBinarySearchTree(SimpleBinarySearchTree):
         y.update()
 
     def _right_rotate(self, x):
+        """Implement AVL right rotation."""
         y = x.left
         y.parent = x.parent
         if y.parent is None:
@@ -74,27 +76,8 @@ class AVLBinarySearchTree(SimpleBinarySearchTree):
         x.update()
         y.update()
 
-    def _temp(self, node, n=100):
-        if node is None:
-            print(None)
-            return
-        counter = 0
-        print()
-        print(node)
-        pnode = node.parent
-        while counter < n and node.parent is not None:
-            node = node.parent
-            counter += 1
-        if counter < n:
-            print('---')
-        else:
-            print()
-            print(pnode)
-            print('***')
-            raise ValueError()
-
-
     def _rebalance(self, node):
+        """Rebalance tree using rotations."""
         while node is not None:
             node.update()
             if self._height(node.left) >= 2 + self._height(node.right):
@@ -114,8 +97,7 @@ class AVLBinarySearchTree(SimpleBinarySearchTree):
     def _avl_merge_at_root(self, lnode, rnode, pnode):
         """Merge two node to a common root."""
         # Simplest case, direct merging
-        if lnode is None or rnode is None or\
-            abs(lnode.height - rnode.height) <= 1:
+        if abs(lnode.height - rnode.height) <= 1:
             return self._merge_at_root(lnode, rnode, pnode)
 
         # Search for insertion point to keep balanced
@@ -145,65 +127,11 @@ class AVLBinarySearchTree(SimpleBinarySearchTree):
 
         return knode
 
-    def _fast_merge_trees(self, ltree, rtree):
-        """Merge avl separated and larger rtree to ltree."""
+    def _fast_tree_merger(self, ltree, rtree):
+        """Merge AVL separated with rtree containing largest values."""
         root = ltree._root.max()
         root = ltree.delete(root.key)
         ltree._root = self._avl_merge_at_root(
             ltree._root, rtree._root, root
         )
         rtree._root = None
-
-    def _disconnect(self, node):
-        pnode = node.parent
-        node.parent = None
-        if pnode is not None:
-            if node is pnode.right:
-                pnode.right = None
-            else:
-                pnode.left = None
-            self._rebalance(pnode)
-        lnode = node.left
-        if lnode is not None:
-            lnode.parent = None
-            node.left = None
-        rnode = node.right
-        if rnode is not None:
-            rnode.parent = None
-            node.right = None
-        node.update()
-        return lnode, pnode, rnode
-
-
-    def split(self, key):
-        """Split a tree in two trees."""
-
-        # Define tree types
-        treetype = type(self)
-        ltree = treetype()
-        rtree = treetype()
-
-        # Find key node
-        node = self._root.find(key)
-        lnode, pnode, rnode = self._disconnect(node)
-        ltree.merge(treetype(lnode))
-        rtree.merge(treetype(rnode))
-        if node.key < key or node.key == key:
-            ltree.insert(node)
-        else:
-            rtree.insert(node)
-        node = pnode
-
-        # Iterative mergers
-        while node is not None:
-            lnode, pnode, rnode = self._disconnect(node)
-            if key < node.key:
-                rtree.merge(treetype(rnode))
-                rtree.insert(node)
-            else:
-                ltree.merge(treetype(lnode))
-                ltree.insert(node)
-            node = pnode
-
-        self._root = ltree._root
-        return rtree

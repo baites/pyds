@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+* Having split almost working
 * Factorizing code between simple and avl tree implementation
 * Making all separable tree merges in O(n)
 * First functional of simple and avl tree with merge

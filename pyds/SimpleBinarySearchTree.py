@@ -71,8 +71,8 @@ class SimpleBinarySearchTree(BinarySearchTree):
         root.update()
         return root
 
-    def _fast_merge_trees(self, ltree, rtree):
-        """Merge avl separated and larger rtree to ltree."""
+    def _fast_tree_merger(self, ltree, rtree):
+        """Merge separated with rtree containing largest values."""
         root = ltree._root.max()
         root = ltree.delete(root.key)
         ltree._root = self._merge_at_root(
@@ -80,7 +80,7 @@ class SimpleBinarySearchTree(BinarySearchTree):
         )
         rtree._root = None
 
-    def _slow_merge_trees(self, ltree, rtree):
+    def _slow_tree_merger(self, ltree, rtree):
         """Merge slow but all type of trees."""
         node = rtree.min()
         while node is not None:
@@ -91,43 +91,100 @@ class SimpleBinarySearchTree(BinarySearchTree):
 
     def merge(self, tree):
         """Merge tree to self."""
+        # Check empty tree
         if tree._root is None:
             return
+        # Check for empty self
         if self._root is None:
             self._root = tree._root
             tree._root = None
             return
+
+        # Check if tree has one node and just insert
+        if tree._root.left is None and\
+            tree._root.right is None:
+            self.insert(tree._root)
+            tree._root = None
+            return
+        # Check if self has one node and just insert
+        if self._root.left is None and\
+            self._root.right is None:
+            tree.insert(self._root)
+            self._root = tree._root
+            tree._root = None
+            return
+
+        # Check for tree separation
         rootmax = self._root.max()
         rootmin = self._root.min()
         treemax = tree.max()
         treemin = tree.min()
+
+        # Merge trees
         if rootmax.key < treemin.key:
-            self._fast_merge_trees(self, tree)
+            self._fast_tree_merger(self, tree)
         elif treemax.key < rootmin.key:
-            self._fast_merge_trees(tree, self)
+            self._fast_tree_merger(tree, self)
             self._root = tree._root
             tree._root = None
         else:
-            self._slow_merge_trees(self, tree)
+            self._slow_tree_merger(self, tree)
 
-    def _split(self, root, key):
-        """Split a tree from key."""
-        if root == None:
-            return None, None
-        if key < root.key:
-            lnode, mnode = self._split(root.left, key)
-            rnode = self._merge_at_root(mnode, root.right, root)
-            return lnode, rnode
-        mnode, rnode = self._split(root.right, key)
-        lnode = self._merge_at_root(root.left, mnode, root)
-        return lnode, rnode
+    def _disconnect(self, node):
+        """Disconect a node from its parent and child."""
+        # Diconnect from parent
+        pnode = node.parent
+        node.parent = None
+        if pnode is not None:
+            if node is pnode.right:
+                pnode.right = None
+            else:
+                pnode.left = None
+            pnode.update()
+
+        # Diconnect from left child
+        lnode = node.left
+        if lnode is not None:
+            lnode.parent = None
+            node.left = None
+        rnode = node.right
+
+        # Diconnect from right child
+        if rnode is not None:
+            rnode.parent = None
+            node.right = None
+        node.update()
+        return lnode, pnode, rnode
 
     def split(self, key):
-        """Split self returning right side."""
-        nodetype = type(self)
-        rtree = nodetype()
-        if self._root is None:
-            return rtree
-        self._root, rnode = self._split(self._root, key)
-        rtree._root = rnode
+        """Split a tree in two trees."""
+
+        # Define tree types
+        treetype = type(self)
+        ltree = treetype()
+        rtree = treetype()
+
+        # Find key node
+        node = self._root.find(key)
+        lnode, pnode, rnode = self._disconnect(node)
+        ltree.merge(treetype(lnode))
+        rtree.merge(treetype(rnode))
+        if node.key < key or node.key == key:
+            ltree.insert(node)
+        else:
+            rtree.insert(node)
+        node = pnode
+
+        # Iterative mergers
+        while node is not None:
+            lnode, pnode, rnode = self._disconnect(node)
+            if key < node.key:
+                rtree.merge(treetype(rnode))
+                rtree.insert(node)
+            else:
+                ltree.merge(treetype(lnode))
+                ltree.insert(node)
+            node = pnode
+
+        self._root = ltree._root
         return rtree
