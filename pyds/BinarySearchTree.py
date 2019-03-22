@@ -18,11 +18,11 @@ class BinarySearchTreeNode(abc.ABC):
         """Internal method for ASCII art."""
         label = self.nodelabel(self)
         if self.left is None:
-            left_lines, left_pos, left_width = [], 0, 0
+            left_lines, left_pos, left_width = ['x'], 0, 1
         else:
             left_lines, left_pos, left_width = self.left._str()
         if self.right is None:
-            right_lines, right_pos, right_width = [], 0, 0
+            right_lines, right_pos, right_width = ['x'], 0, 1
         else:
             right_lines, right_pos, right_width = self.right._str()
         middle = max(right_pos + left_width - left_pos + 1, len(label), 2)
@@ -131,9 +131,9 @@ class BinarySearchTreeNode(abc.ABC):
 class BinarySearchTree(abc.ABC):
     """Implement a base class for binary trees."""
 
-    def __init__(self):
+    def __init__(self, root):
         """Constructor."""
-        self._root = None
+        self._root = root
 
     def __str__(self):
         """Print the tree."""

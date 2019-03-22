@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+* Factorizing code between simple and avl tree implementation
+* Making all separable tree merges in O(n)
 * First functional of simple and avl tree with merge
 * cleanning the implementation and adding generic but slow merge
 * cleanning the implementation and adding generic but slow merge

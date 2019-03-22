@@ -18,9 +18,9 @@ class SimpleBinarySearchTreeNode(BinarySearchTreeNode):
 class SimpleBinarySearchTree(BinarySearchTree):
     """Implement an AVL BST."""
 
-    def __init__(self):
+    def __init__(self, root=None):
         """Constructor."""
-        super().__init__()
+        super().__init__(root)
 
     def _rebalance(self, node):
         """Provide placeholder for AVL."""
@@ -55,7 +55,7 @@ class SimpleBinarySearchTree(BinarySearchTree):
                 self._root.parent = None
         else:
             deleted = node._delete()
-        self._rebalance(deleted.parent)
+            self._rebalance(deleted.parent)
         deleted.parent = None
         return deleted
 
@@ -67,15 +67,16 @@ class SimpleBinarySearchTree(BinarySearchTree):
         root.right = rnode
         if rnode is not None:
             rnode.parent = root
+        root.parent = None
         root.update()
         return root
 
     def _fast_merge_trees(self, ltree, rtree):
         """Merge avl separated and larger rtree to ltree."""
         root = ltree._root.max()
-        ltree.delete(root.key)
+        root = ltree.delete(root.key)
         ltree._root = self._merge_at_root(
-            ltree._root, rtree.root, root
+            ltree._root, rtree._root, root
         )
         rtree._root = None
 
@@ -90,7 +91,11 @@ class SimpleBinarySearchTree(BinarySearchTree):
 
     def merge(self, tree):
         """Merge tree to self."""
-        if self._root is None or tree._root is None:
+        if tree._root is None:
+            return
+        if self._root is None:
+            self._root = tree._root
+            tree._root = None
             return
         rootmax = self._root.max()
         rootmin = self._root.min()
