@@ -11,9 +11,6 @@ class AVLBinarySearchTreeNode(SimpleBinarySearchTreeNode):
         """Constructor."""
         super().__init__(key)
         self._height = 0
-        self.nodelabel = lambda node: str(
-            '{},{}'.format(node.key, node._height)
-        )
 
     def update(self):
         """Update the height after rebalancing."""

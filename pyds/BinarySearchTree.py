@@ -12,11 +12,10 @@ class BinarySearchTreeNode(abc.ABC):
         self.parent = None
         self.left = None
         self.right = None
-        self.nodelabel = lambda node: str(node.key)
 
     def _str(self):
         """Internal method for ASCII art."""
-        label = self.nodelabel(self)
+        label = self.label()
         if self.left is None:
             left_lines, left_pos, left_width = ['x'], 0, 1
         else:
@@ -46,7 +45,13 @@ class BinarySearchTreeNode(abc.ABC):
         return lines, pos, width
 
     def __str__(self):
+        """Define string representation for
+           the subtree rooted at the node."""
         return '\n'.join(self._str()[0])
+
+    def label(self):
+        """Define the label used for the node."""
+        return str(node.key)
 
     abc.abstractmethod
     def update(self):
