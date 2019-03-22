@@ -40,13 +40,15 @@ class SimpleBinarySearchTree(BinarySearchTree):
         """Delete a node from the tree."""
         # Call BST delete first
         super().delete(key)
+        # Getting self type
+        treetype = type(self._root)
         # Implement delete operation
         node = self.find(key)
         deleted = None
         if not key == node.key:
             return deleted
         if node is self._root:
-            pseudoroot = SimpleBinarySearchTreeNode(None)
+            pseudoroot = treetype(None)
             pseudoroot.left = self._root
             self._root.parent = pseudoroot
             deleted = self._root._delete()
@@ -55,7 +57,7 @@ class SimpleBinarySearchTree(BinarySearchTree):
                 self._root.parent = None
         else:
             deleted = node._delete()
-            self._rebalance(deleted.parent)
+        self._rebalance(deleted.parent)
         deleted.parent = None
         return deleted
 
