@@ -4,7 +4,7 @@ from pyds.BinarySearchTree import BinarySearchTreeNode, BinarySearchTree
 
 
 class SimpleBinarySearchTreeNode(BinarySearchTreeNode):
-    """Implement an AVL compatible node."""
+    """Implement an compatible node."""
 
     def __init__(self, key):
         """Constructor."""
@@ -40,21 +40,20 @@ class SimpleBinarySearchTree(BinarySearchTree):
         """Delete a node from the tree."""
         # Call BST delete first
         super().delete(key)
-        # Getting self type
-        treetype = type(self._root)
         # Implement delete operation
         node = self.find(key)
         deleted = None
         if not key == node.key:
             return deleted
         if node is self._root:
-            pseudoroot = treetype(None)
+            pseudoroot = SimpleBinarySearchTreeNode(None)
             pseudoroot.left = self._root
             self._root.parent = pseudoroot
             deleted = self._root._delete()
             self._root = pseudoroot.left
             if self._root is not None:
                 self._root.parent = None
+            deleted.patent = None
         else:
             deleted = node._delete()
         self._rebalance(deleted.parent)
