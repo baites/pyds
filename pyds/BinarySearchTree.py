@@ -51,7 +51,7 @@ class BinarySearchTreeNode(abc.ABC):
 
     def label(self):
         """Define the label used for the node."""
-        return str(node.key)
+        return str(self.key)
 
     abc.abstractmethod
     def update(self):
