@@ -99,6 +99,15 @@ class BinarySearchTreeNode(abc.ABC):
             node = node.parent
         return node.parent
 
+    def prev(self):
+        """Find the node in the tree with the previous largest key."""
+        if self.left is not None:
+            return self.left.max()
+        node = self
+        while node.parent is not None and node is node.parent.left:
+            node = node.parent
+        return node.parent
+
     def _insert(self, node):
         """Inserts a node into the subtree rooted at this node."""
         parent = self.find(node.key)
