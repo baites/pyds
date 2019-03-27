@@ -10,21 +10,21 @@ class Node(AVLBinarySearchTreeNode):
     def __init__(self, key, high):
         super().__init__(key)
         self.high = high
-        self.max = max
+        self.maxhigh = high
 
     def label(self):
         """Customize node label."""
-        return '[{},{}]|{}'.format(self.key, self.high, self.max)
+        return '[{},{}]|{}'.format(self.key, self.high, self.maxhigh)
 
     def update(self):
         """Customize node update the keysum."""
         # Call parent update first
         super().update()
-        self.max = self.high
+        self.maxhigh = self.high
         if self.left is not None:
-            self.max = max(self.max, self.left.max)
+            self.maxhigh = max(self.maxhigh, self.left.maxhigh)
         if self.right is not None:
-            self.max = max(self.max, self.right.max)
+            self.maxhigh = max(self.maxhigh, self.right.maxhigh)
 
     def overlap(self, interval):
         """Check if interval overlap with self."""
@@ -46,7 +46,7 @@ class IntervalTree(AVLBinarySearchTree):
         while node is not None \
             and not node.overlap(interval):
             if node.left is not None \
-                and node.left.max >= interval.key:
+                and node.left.maxhigh >= interval.key:
                 node = node.left
             else:
                 node = node.right
