@@ -13,9 +13,8 @@ class Interval:
         self.high = high
 
     def __eq__(self, other):
-        return self.low == other.low and\
-                self.high == self.high
-
+        return self.low == other.low
+        
     def __lt__(self, other):
         return self.low < other.low
 
