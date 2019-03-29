@@ -30,7 +30,9 @@ def main():
 
     # Insert the nodes
     for low, high in intervals:
-        tree.insert(Node(low, high))
+        tree.insert(
+            Node(Interval(low, high))
+        )
 
     # Print original tree
     print('Initial interval tree:')

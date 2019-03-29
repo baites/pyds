@@ -24,12 +24,10 @@ def IntervalTreeNode(nodetype):
     class _(nodetype):
         """Implement node for an interval tree."""
 
-        def __init__(self, low, high):
+        def __init__(self, interval):
             """Constructor."""
-            super().__init__(
-                Interval(low, high)
-            )
-            self.maxhigh = high
+            super().__init__(interval)
+            self.maxhigh = interval.high
 
         def label(self):
             """Customize node label."""
